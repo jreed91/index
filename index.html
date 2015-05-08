@@ -1,0 +1,15 @@
+<head>
+  <title>index</title>
+</head>
+
+<body>
+  <h1>Index</h1>
+  {{> loginButtons}}
+  {{> newPost}}
+  <div class="container"> 
+	  {{#each posts}}
+	  	{{> post}}
+	  {{/each}}
+  </div>
+</body>
+

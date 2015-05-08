@@ -1,0 +1,33 @@
+<template name="post">
+  <div class="title">
+  {{#if show}}
+  	<div class="{{#if show}}show{{/if}} controls">
+  		<form class="edit">
+		  	<input type="text" name="title" value="{{title}}">
+		  	<input type="text" name="description" value="{{description}}">
+		  	<input type="submit" value="Submit" />
+	  	</form>
+	  	<button class="delete">&times;</button>
+	  	<button class="cancel toggle-show">Cancel</button>
+  	</div>
+  {{else}}
+  	{{#if isUpvoted}}
+  	{{else}}
+  	<div class="upvote">^</div>
+  	{{/if}}
+  	<h1>{{title}}</h1>
+  	<span>{{description}}</span>
+  	{{score}}
+  	{{#if isOwner}}
+  	<button class="toggle-show">Edit</button>
+  	{{/if}}
+  {{/if}}
+  </div>
+</template>
+<template name="newPost">
+  <form class="new-post">
+  	<input type="text" name="title" placeholder="Title">
+  	<input type="text" name="description" placeholder="Description">
+  	<input type="submit" value="Submit" />
+  </form>
+</template>

@@ -1,0 +1,12 @@
+/* CSS declarations go here */
+body{
+	
+}
+
+.controls {
+	display: none;
+}
+
+.show {
+	display: block;
+}
