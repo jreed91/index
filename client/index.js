@@ -1,11 +1,8 @@
 
 if (Meteor.isClient) {
-
-  console.log(Session.get("isUpvoted"));
   Meteor.autorun(function() {
     Meteor.subscribe("posts");
   });
-
 
   Template.body.helpers({
     posts: function () {
@@ -17,8 +14,7 @@ if (Meteor.isClient) {
       return this.owner === Meteor.userId();
     },
     isUpvoted: function () {
-      return Session.get("id");
-      
+      var postId = this._id;
     }
   });
 
@@ -31,12 +27,16 @@ if (Meteor.isClient) {
       });
     },
     "click .upvote": function() {
+      var postId = this._id;
+      var userId = Meteor.userId();
+
+
       Meteor.call("upvotePost", this._id, function(error){
         if (error) {
           console.log(error);
         }
-        Session.set({id: this._id, isUpvoted: true});
       });
+
     },
 
     "submit .edit": function(event, template) {
