@@ -15,6 +15,13 @@ if (Meteor.isClient) {
     },
     isUpvoted: function () {
       var postId = this._id;
+      var userId = Meteor.userId();
+
+      var isUpvoted = UserSession.get(postId, userId);
+
+      if (postId == isUpvoted) {
+        return true;
+      }
     }
   });
 
@@ -30,8 +37,8 @@ if (Meteor.isClient) {
       var postId = this._id;
       var userId = Meteor.userId();
 
-
-      Meteor.call("upvotePost", this._id, function(error){
+      UserSession.set(postId, postId, userId);
+      Meteor.call("upvotePost", postId, function (error) {
         if (error) {
           console.log(error);
         }
@@ -41,7 +48,6 @@ if (Meteor.isClient) {
 
     "submit .edit": function(event, template) {
       var id = this._id;
-      var show = this.show;
       var title = event.target.title.value;
       var description = event.target.description.value;
 
@@ -49,23 +55,15 @@ if (Meteor.isClient) {
         if (error) {
           console.log(error);
         }
-        else {
-          Meteor.call("setShow", id, ! show, function (error, result) {
-            if (error) {
-              console.log(error);
-            }
-          });
-        }
-       
       });
     },
-
-    "click .toggle-show": function() {
-      Meteor.call("setShow", this._id, ! this.show, function (error) {
-        if (error) {
-          console.log(error);
-        }
-      });
+    "click .toggle-show": function(event) {
+      $this = $(event.target);
+      controls = $this.parent().find(".controls");
+      post = $this.parent().find(".post");
+      console.log(controls);
+      controls.toggle();
+      post.toggle()
     }
   });
 

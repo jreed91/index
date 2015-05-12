@@ -15,5 +15,5 @@ body{
 	display: block;
 }
 .hide {
-	visibility: hidden;
+	display: none;
 }
