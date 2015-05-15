@@ -1,29 +1,41 @@
 <template name="post">
   <div class="title">
-  	<div class="controls">
-  		<form class="edit">
+  	{{#if show}}
+  	{{#if isOwner}}
+  	{{> editPost}}
+  	{{/if}}
+  	{{else}}
+	<div class="post">
+	  	<a class="upvote {{#if isUpvoted}}upvoted{{/if}}">
+		  	<span class="upvote-arrow"></span>
+		  	<span class="upvote-count">{{score}}</span>
+	  	</a>
+	  	<h1>{{title}}</h1>
+	  	<span>{{description}}</span>
+  	</div>
+  	{{#if isOwner}}
+  		<button class="toggle-show">Edit</button>
+  	{{/if}}
+  	{{/if}}
+  </div>
+</template>
+
+<template name="editPost">
+	<div class="{{#if show}}show{{/if}} controls">
+		<a class="{{#if isUpvoted}}upvoted{{/if}}">
+		  	<span class="upvote-arrow"></span>
+		  	<span class="upvote-count">{{score}}</span>
+		</a>
+			<form class="edit">
 		  	<input type="text" name="title" value="{{title}}">
 		  	<input type="text" name="description" value="{{description}}">
 		  	<input type="submit" value="Submit" />
 	  	</form>
 	  	<button class="delete">&times;</button>
-  	</div>
-  	{{#if isUpvoted}}
-  	{{else}}
-  	<div class="post">
-  	<div>
-  		<button class="upvote">Upvote</button>
-  	</div>
-  	{{/if}}
-  	<h1>{{title}}</h1>
-  	<span>{{description}}</span>
-  	{{score}}
-  	
-  </div>
-  {{#if isOwner}}
-  	<button class="toggle-show">Edit</button>
-  	{{/if}}
+	  	<button class="cancel toggle-show">Cancel</button>
+	</div>
 </template>
+
 <template name="newPost">
   <form class="new-post">
   	<input type="text" name="title" placeholder="Title">

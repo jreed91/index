@@ -11,8 +11,8 @@ body{
 	display: block;
 }
 
-.upvote {
-	display: block;
+.upvoted {
+	background-color: red;
 }
 .hide {
 	display: none;

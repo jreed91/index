@@ -1,5 +1,8 @@
 
 if (Meteor.isClient) {
+  var userId = Meteor.userId();
+  Session.setDefault
+
   Meteor.autorun(function() {
     Meteor.subscribe("posts");
   });
@@ -12,20 +15,11 @@ if (Meteor.isClient) {
   Template.post.helpers({
     isOwner: function () {
       return this.owner === Meteor.userId();
-    },
-    isUpvoted: function () {
-      var postId = this._id;
-      var userId = Meteor.userId();
-
-      var isUpvoted = UserSession.get(postId, userId);
-
-      if (postId == isUpvoted) {
-        return true;
-      }
     }
   });
 
   Template.post.events({
+
     "click .delete": function() {
       Meteor.call("deletePost", this._id, function (error) {
         if (error) {
@@ -33,16 +27,36 @@ if (Meteor.isClient) {
         }
       });
     },
+
     "click .upvote": function() {
       var postId = this._id;
-      var userId = Meteor.userId();
+      var userId = Meteor.userId(),
+       index = -1;
+      var upvotes = this.upvotes;
+      var isUpvoted = false;
 
-      UserSession.set(postId, postId, userId);
-      Meteor.call("upvotePost", postId, function (error) {
-        if (error) {
-          console.log(error);
+       for (var i = upvotes.length - 1; i >= 0; i--) {
+          if (upvotes[i].userId === userId) {
+            index = i;
+            isUpvoted = upvotes[i].isUpvoted;
+            break;
+          }
+        };
+        console.log(upvotes);
+        if (index != -1) {
+          Meteor.call("upvotePost", postId, userId, ! isUpvoted, function(error) {
+            if (error) {
+              console.log(error);
+            }
+          });
         }
-      });
+        else {
+          Meteor.call("newUpvote", postId, userId, true, function(error) {
+            if (error) {
+              console.log(error);
+            }
+          });
+        }
 
     },
 
@@ -57,23 +71,24 @@ if (Meteor.isClient) {
         }
       });
     },
-    "click .toggle-show": function(event) {
-      $this = $(event.target);
-      controls = $this.parent().find(".controls");
-      post = $this.parent().find(".post");
-      console.log(controls);
-      controls.toggle();
-      post.toggle()
-    }
-  });
+    "click .toggle-show": function() {
+      Meteor.call("setShow", this._id, ! this.show, function (error) {
+        if (error) {
+          console.log(error);
+        }
+      });
+      
+      }
+    });
 
   Template.newPost.events({
     "submit .new-post": function(event, template) {
 
       var title = event.target.title.value;
       var description = event.target.description.value;
+      var userId = Meteor.userId();
 
-      Meteor.call("addPost", title, description, function (error) {
+      Meteor.call("addPost", title, description, userId, function (error) {
         if (error) {
           console.log(error);
         }
