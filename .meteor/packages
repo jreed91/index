@@ -8,3 +8,4 @@ meteor-platform
 accounts-ui
 accounts-password
 benjaminrh:user-session
+ajduke:bootstrap-tagsinput

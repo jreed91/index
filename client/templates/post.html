@@ -12,6 +12,9 @@
 	  	</a>
 	  	<h1>{{title}}</h1>
 	  	<span>{{description}}</span>
+	  	<div class="tags">
+	  	{{tags}}
+	  	</div>
   	</div>
   	{{#if isOwner}}
   		<button class="toggle-show">Edit</button>
@@ -29,6 +32,7 @@
 			<form class="edit">
 		  	<input type="text" name="title" value="{{title}}">
 		  	<input type="text" name="description" value="{{description}}">
+		  	<input type="text" name="tags" data-role="tagsinput" value="{{tags}}" >
 		  	<input type="submit" value="Submit" />
 	  	</form>
 	  	<button class="delete">&times;</button>
@@ -39,7 +43,9 @@
 <template name="newPost">
   <form class="new-post">
   	<input type="text" name="title" placeholder="Title">
-  	<input type="text" name="description" placeholder="Description">
+  	<input type="text" name="description" placeholder="Description" >
+  	<input type="text" name="tags" data-role="tagsinput" >
   	<input type="submit" value="Submit" />
   </form>
 </template>
+

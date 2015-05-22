@@ -1,7 +1,6 @@
 
 if (Meteor.isClient) {
   var userId = Meteor.userId();
-  Session.setDefault
 
   Meteor.autorun(function() {
     Meteor.subscribe("posts");
@@ -9,7 +8,8 @@ if (Meteor.isClient) {
 
   Template.body.helpers({
     posts: function () {
-      return Posts.find().fetch();
+      var posts = Posts.find().fetch();
+      return posts;
     }
   });
   Template.post.helpers({
@@ -42,9 +42,8 @@ if (Meteor.isClient) {
             break;
           }
         };
-        console.log(upvotes);
         if (index != -1) {
-          Meteor.call("upvotePost", postId, userId, ! isUpvoted, function(error) {
+          Meteor.call("upvotePost", postId, userId, isUpvoted, function(error) {
             if (error) {
               console.log(error);
             }
@@ -64,38 +63,50 @@ if (Meteor.isClient) {
       var id = this._id;
       var title = event.target.title.value;
       var description = event.target.description.value;
+      var tags = event.target.tags.value;
 
-      Meteor.call("updatePost", id, title, description, function (error, result) {
+      Meteor.call("updatePost", id, title, description, tags, function (error, result) {
         if (error) {
           console.log(error);
         }
+        else {
+          console.log(result);
+        }
       });
     },
+
     "click .toggle-show": function() {
       Meteor.call("setShow", this._id, ! this.show, function (error) {
         if (error) {
           console.log(error);
         }
       });
-      
-      }
+
+    }
     });
 
   Template.newPost.events({
-    "submit .new-post": function(event, template) {
+    "submit .new-post": function(event) {
 
       var title = event.target.title.value;
       var description = event.target.description.value;
       var userId = Meteor.userId();
+      var tags = event.target.tags.value;
+      console.log(tags);
 
-      Meteor.call("addPost", title, description, userId, function (error) {
+
+      Meteor.call("addPost", title, description, userId, tags, function (error, result) {
         if (error) {
           console.log(error);
+        }
+        else {
+          console.log(result);
         }
       });
 
       event.target.title.value = "";
       event.target.description.value = "";
+      event.target.tags = $.empty();
 
       return false;
     }
@@ -105,4 +116,3 @@ if (Meteor.isClient) {
     passwordSignupFields: "USERNAME_ONLY"
   });
 }
-
